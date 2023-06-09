@@ -1,12 +1,12 @@
 const express = require("express");
-const swaggerUi = require("swagger-ui-express");
-const swagger = require("./swagger");
+const route = require("./routes/index.route");
 import "./database";
 
 const app = express();
-const port = 5000;
+const Router = express.Router();
+route(app);
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
+const port = 5000;
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

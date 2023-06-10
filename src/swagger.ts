@@ -31,7 +31,8 @@ const options = {
             {
               name: "filter",
               in: "query",
-              description: "Filter by `drivers` or `team` or `fastest-laps`",
+              description:
+                "Filter by `races` or `drivers` or `team` or `fastest-laps`",
               schema: {
                 type: "string",
               },

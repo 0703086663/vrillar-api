@@ -12,6 +12,11 @@ import {
   TeamInterface,
 } from "../interface";
 
+import { RaceModel } from "../models/race.model";
+import { DriverModel } from "../models/driver.model";
+import { TeamModel } from "../models/team.model";
+import { LapModel } from "../models/lap.model";
+
 class CrawlingController {
   crawling(req: Request, res: Response) {
     let url = "";
@@ -21,10 +26,41 @@ class CrawlingController {
       url = `https://www.formula1.com/en/results.html/${req.query.year}/races.html`;
       crawlingByRace(url)
         .then((data: RaceInterface[]) => {
-          return res.json(data).status(200);
+          data.forEach((race: RaceInterface) => {
+            race.time = new Date(`1970-01-01T${race.time}`);
+          });
+          RaceModel.insertMany(data)
+            .then(() => res.json(data).status(200))
+            .catch((error: Error) => {
+              console.log(error);
+              res
+                .status(500)
+                .json({ error: "Failed to store data in MongoDB" });
+            });
         })
         .catch((error: Error) => {
           console.log(error);
+          res.status(500).json({ error: "Failed to crawl data" });
+        });
+    } else if (
+      req.query.filter == "races" &&
+      (req.query.year == undefined || req.query.year == null)
+    ) {
+      url = `https://www.formula1.com/en/results.html/${year}/races.html`;
+      crawlingByRace(url)
+        .then((data: RaceInterface[]) => {
+          RaceModel.insertMany(data)
+            .then(() => res.json(data).status(200))
+            .catch((error: Error) => {
+              console.log(error);
+              res
+                .status(500)
+                .json({ error: "Failed to store data in MongoDB" });
+            });
+        })
+        .catch((error: Error) => {
+          console.log(error);
+          res.status(500).json({ error: "Failed to crawl data" });
         });
     } else if (
       req.query.filter == "drivers" &&
@@ -35,10 +71,18 @@ class CrawlingController {
       }.html`;
       crawlingByDriver(url)
         .then((data: DriverInterface[]) => {
-          return res.json(data).status(200);
+          DriverModel.insertMany(data)
+            .then(() => res.json(data).status(200))
+            .catch((error: Error) => {
+              console.log(error);
+              res
+                .status(500)
+                .json({ error: "Failed to store data in MongoDB" });
+            });
         })
         .catch((error: Error) => {
           console.log(error);
+          res.status(500).json({ error: "Failed to crawl data" });
         });
     } else if (
       req.query.filter == "team" &&
@@ -49,10 +93,18 @@ class CrawlingController {
       }.html`;
       crawlingByTeam(url)
         .then((data: TeamInterface[]) => {
-          return res.json(data).status(200);
+          TeamModel.insertMany(data)
+            .then(() => res.json(data).status(200))
+            .catch((error: Error) => {
+              console.log(error);
+              res
+                .status(500)
+                .json({ error: "Failed to store data in MongoDB" });
+            });
         })
         .catch((error: Error) => {
           console.log(error);
+          res.status(500).json({ error: "Failed to crawl data" });
         });
     } else if (
       req.query.filter == "fastest-laps" &&
@@ -63,10 +115,18 @@ class CrawlingController {
       }.html`;
       crawlingByLap(url)
         .then((data: LapInterface[]) => {
-          return res.json(data).status(200);
+          LapModel.insertMany(data)
+            .then(() => res.json(data).status(200))
+            .catch((error: Error) => {
+              console.log(error);
+              res
+                .status(500)
+                .json({ error: "Failed to store data in MongoDB" });
+            });
         })
         .catch((error: Error) => {
           console.log(error);
+          res.status(500).json({ error: "Failed to crawl data" });
         });
     } else if (
       (req.query.filter == undefined || req.query.filter == null) &&
@@ -74,11 +134,19 @@ class CrawlingController {
     ) {
       url = `https://www.formula1.com/en/results.html/${year}/races.html`;
       crawlingByRace(url)
-        .then((data: LapInterface[]) => {
-          return res.json(data).status(200);
+        .then((data: RaceInterface[]) => {
+          RaceModel.insertMany(data)
+            .then(() => res.json(data).status(200))
+            .catch((error: Error) => {
+              console.log(error);
+              res
+                .status(500)
+                .json({ error: "Failed to store data in MongoDB" });
+            });
         })
         .catch((error: Error) => {
           console.log(error);
+          res.status(500).json({ error: "Failed to crawl data" });
         });
     }
   }

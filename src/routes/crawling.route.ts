@@ -1,8 +1,7 @@
-const express = require("express");
-const router = express.Router();
-
+import { router } from "./index.route";
 const crawlingController = require("../controllers/crawling.controller");
 
-router.get("/", crawlingController.crawlingByYear);
+// router.get("/by-year/:year", crawlingController.crawlingByYear);
+router.get("/", crawlingController.crawling);
 
 module.exports = router;

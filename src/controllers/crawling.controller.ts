@@ -1,43 +1,86 @@
 import { Request, Response } from "express";
-
-const axios = require("axios");
-const cheerio = require("cheerio");
+import {
+  crawlingByDriver,
+  crawlingByLap,
+  crawlingByRace,
+  crawlingByTeam,
+} from "../utils/crawling";
+import {
+  DriverInterface,
+  LapInterface,
+  RaceInterface,
+  TeamInterface,
+} from "../interface";
 
 class CrawlingController {
-  crawlingByYear(req: Request, res: Response) {
-    const url = `https://www.formula1.com/en/results.html/2023/races.html`;
+  crawling(req: Request, res: Response) {
+    let url = "";
+    let year = new Date().getFullYear();
 
-    axios
-      .get(url)
-      .then((response: any) => {
-        if (response.status === 200) {
-          const html = response.data;
-          const $ = cheerio.load(html);
-
-          // Use cheerio selectors to extract the desired data
-          const trElements = $(".resultsarchive-table tr");
-
-          trElements.each((index: number, element: any) => {
-            const grandPrix = $(element).find("td:nth-child(2)").text();
-            const date = $(element).find("td:nth-child(3)").text();
-            const driver = $(element).find("td:nth-child(4)").text();
-            const carName = $(element).find("td:nth-child(5)").text();
-            const laps = $(element).find("td:nth-child(6)").text();
-            const time = $(element).find("td:nth-child(7)").text();
-
-            console.log(`Grand Prix: ${grandPrix}`);
-            console.log(`Date: ${date}`);
-            console.log(`Driver: ${driver}`);
-            console.log(`Car Name: ${carName}`);
-            console.log(`Laps: ${laps}`);
-            console.log(`Time: ${time}`);
-            console.log("---------------------------");
-          });
-        }
-      })
-      .catch((error: Error) => {
-        console.log(error);
-      });
+    if (req.query.year != undefined || req.query.year != null) {
+      url = `https://www.formula1.com/en/results.html/${req.query.year}/races.html`;
+      crawlingByRace(url)
+        .then((data: RaceInterface[]) => {
+          return res.json(data).status(200);
+        })
+        .catch((error: Error) => {
+          console.log(error);
+        });
+    } else if (
+      req.query.filter == "drivers" &&
+      (req.query.year == undefined || req.query.year == null)
+    ) {
+      url = `https://www.formula1.com/en/results.html/${year}/${
+        req.query.filter ? req.query.filter : "races"
+      }.html`;
+      crawlingByDriver(url)
+        .then((data: DriverInterface[]) => {
+          return res.json(data).status(200);
+        })
+        .catch((error: Error) => {
+          console.log(error);
+        });
+    } else if (
+      req.query.filter == "team" &&
+      (req.query.year == undefined || req.query.year == null)
+    ) {
+      url = `https://www.formula1.com/en/results.html/${year}/${
+        req.query.filter ? req.query.filter : "team"
+      }.html`;
+      crawlingByTeam(url)
+        .then((data: TeamInterface[]) => {
+          return res.json(data).status(200);
+        })
+        .catch((error: Error) => {
+          console.log(error);
+        });
+    } else if (
+      req.query.filter == "fastest-laps" &&
+      (req.query.year == undefined || req.query.year == null)
+    ) {
+      url = `https://www.formula1.com/en/results.html/${year}/${
+        req.query.filter ? req.query.filter : "fastest-laps"
+      }.html`;
+      crawlingByLap(url)
+        .then((data: LapInterface[]) => {
+          return res.json(data).status(200);
+        })
+        .catch((error: Error) => {
+          console.log(error);
+        });
+    } else if (
+      (req.query.filter == undefined || req.query.filter == null) &&
+      (req.query.year == undefined || req.query.year == null)
+    ) {
+      url = `https://www.formula1.com/en/results.html/${year}/races.html`;
+      crawlingByRace(url)
+        .then((data: LapInterface[]) => {
+          return res.json(data).status(200);
+        })
+        .catch((error: Error) => {
+          console.log(error);
+        });
+    }
   }
 }
 

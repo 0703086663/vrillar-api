@@ -101,6 +101,219 @@ const options = {
           },
         },
       },
+      "/search/by-race": {
+        get: {
+          summary: "Search races based on criteria",
+          tags: ["Search"],
+          parameters: [
+            {
+              name: "grandPrix",
+              in: "query",
+              description: "Name of the Grand Prix",
+              schema: {
+                type: "string",
+              },
+            },
+            {
+              name: "date",
+              in: "query",
+              description: "Date of the race",
+              schema: {
+                type: "string",
+                format: "date",
+              },
+              example: "2023-06-15",
+              "x-format": "date-picker",
+            },
+            {
+              name: "driver",
+              in: "query",
+              description: "Name of the driver",
+              schema: {
+                type: "string",
+              },
+            },
+            {
+              name: "carName",
+              in: "query",
+              description: "Name of the car",
+              schema: {
+                type: "string",
+              },
+            },
+            {
+              name: "laps",
+              in: "query",
+              description: "Number of laps",
+              schema: {
+                type: "integer",
+              },
+            },
+            {
+              name: "time",
+              in: "query",
+              description: "Time of the race",
+              schema: {
+                type: "string",
+                format: "date-time",
+              },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Successful search",
+            },
+            500: {
+              description: "Internal Server Error",
+            },
+          },
+        },
+      },
+      "/search/by-team": {
+        get: {
+          summary: "Search races by team",
+          tags: ["Search"],
+          parameters: [
+            {
+              name: "team",
+              in: "query",
+              description: "Name of the team",
+              schema: {
+                type: "string",
+              },
+            },
+            {
+              name: "pos",
+              in: "query",
+              description: "Position of the team",
+              schema: {
+                type: "integer",
+              },
+            },
+            {
+              name: "pts",
+              in: "query",
+              description: "Points of the team",
+              schema: {
+                type: "integer",
+              },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Successful search",
+            },
+            500: {
+              description: "Internal Server Error",
+            },
+          },
+        },
+      },
+      "/search/by-lap": {
+        get: {
+          summary: "Search laps based on criteria",
+          tags: ["Search"],
+          parameters: [
+            {
+              name: "grandPrix",
+              in: "query",
+              description: "Name of the Grand Prix",
+              schema: {
+                type: "string",
+              },
+            },
+            {
+              name: "driver",
+              in: "query",
+              description: "Name of the driver",
+              schema: {
+                type: "string",
+              },
+            },
+            {
+              name: "carName",
+              in: "query",
+              description: "Name of the car",
+              schema: {
+                type: "string",
+              },
+            },
+            {
+              name: "time",
+              in: "query",
+              description: "Time of the race",
+              schema: {
+                type: "string",
+                format: "date-time",
+              },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Successful search",
+            },
+            500: {
+              description: "Internal Server Error",
+            },
+          },
+        },
+      },
+      "/search/by-driver": {
+        get: {
+          summary: "Search for data by driver",
+          tags: ["Search"],
+          parameters: [
+            {
+              name: "pos",
+              in: "query",
+              description: "Position of driver",
+              schema: {
+                type: "integer",
+              },
+            },
+            {
+              name: "driver",
+              in: "query",
+              description: "Name of the driver",
+              schema: {
+                type: "string",
+              },
+            },
+            {
+              name: "nationality",
+              in: "query",
+              description: "Nationality of the driver",
+              schema: {
+                type: "string",
+              },
+            },
+            {
+              name: "carName",
+              in: "query",
+              description: "Car name of the driver",
+              schema: {
+                type: "string",
+              },
+            },
+            {
+              name: "pts",
+              in: "query",
+              description: "Points of the driver",
+              schema: {
+                type: "integer",
+              },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Successful search",
+            },
+            500: {
+              description: "Internal Server Error",
+            },
+          },
+        },
+      },
     },
   },
   apis: ["./routes/*.jws"],

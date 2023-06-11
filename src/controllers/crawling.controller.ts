@@ -27,7 +27,7 @@ class CrawlingController {
       crawlingByRace(url)
         .then((data: RaceInterface[]) => {
           data.forEach((race: RaceInterface) => {
-            race.time = new Date(`1970-01-01T${race.time}`);
+            race.date = new Date(`1970-01-01T${race.date}`);
           });
           RaceModel.insertMany(data)
             .then(() => res.json(data).status(200))

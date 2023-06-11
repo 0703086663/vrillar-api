@@ -4,7 +4,7 @@ export interface RaceInterface {
   driver: string;
   carName: string;
   laps: number;
-  time: Date;
+  time: string;
 }
 export interface DriverInterface {
   pos: number;
@@ -22,5 +22,5 @@ export interface LapInterface {
   grandPrix: string;
   driver: string;
   carName: string;
-  time: Date;
+  time: string;
 }

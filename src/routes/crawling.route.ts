@@ -1,6 +1,7 @@
-import { router } from "./index.route";
+import express from "express";
+const router = express.Router();
 const crawlingController = require("../controllers/crawling.controller");
 
 router.get("/", crawlingController.crawling);
 
-module.exports = router;
+export default router;
